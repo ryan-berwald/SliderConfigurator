@@ -1,7 +1,6 @@
 ﻿using CSCore.CoreAudioAPI;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace AudioControl
 {
@@ -25,7 +24,7 @@ namespace AudioControl
                             {
                                 var appVolume = app.QueryInterface<SimpleAudioVolume>();
 
-                                //DisplaySessionDetails(app, appVolume);
+                                //DisplaySessionDetails(app, appVolume); //Debugging
                                 allSessions.Add(app);
                     
                                 //appVolume.SetMasterVolumeNative(0.5f, getAppGUID(app));
@@ -55,6 +54,33 @@ namespace AudioControl
         public static Guid getAppGUID(AudioSessionControl2 app)
         {
             return Guid.Parse(app.SessionIdentifier.Substring(18, 36));
+        }
+
+        public static float getVolume(int id, AudioSessionControl2[] allSessions)
+        {
+            foreach (AudioSessionControl2 session in allSessions)
+            {
+                AudioSessionControl2 app = session.QueryInterface<AudioSessionControl2>();
+                if (session.ProcessID == id)
+                {
+                    return app.QueryInterface<SimpleAudioVolume>().MasterVolume;
+                }
+            }
+            return -1;
+        }
+        public static decimal setVolume(int id, AudioSessionControl2[] allSessions, Decimal volToSet)
+        {
+            foreach(AudioSessionControl2 session in allSessions)
+            {
+                AudioSessionControl2 app = session.QueryInterface<AudioSessionControl2>();
+                if (session.ProcessID == id)
+                {
+                    var appVolume = app.QueryInterface<SimpleAudioVolume>();
+                    appVolume.SetMasterVolumeNative(Decimal.ToSingle(volToSet), getAppGUID(app));
+                    return Convert.ToDecimal(app.QueryInterface<SimpleAudioVolume>().MasterVolume);
+                }
+            }
+            return -1;
         }
 
         private static void DisplaySessionDetails(AudioSessionControl2 app, SimpleAudioVolume appVolume)
