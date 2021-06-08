@@ -16,29 +16,44 @@ namespace AudioSerialClientGUI
 
         private List<Process> audioProcesses = new List<Process>();
         private Process[] selectedProcs = { null, null };
+
         private static SerialPort port;
         private CSCore.CoreAudioAPI.AudioSessionControl2[] allSessions;
-        private string[] latestVals = { "", "" };
-
+        private string[] latestVals = { "0 : 0.00\r", "1 : 0.00\r" };
+        NotifyIcon notifyIcon;
 
 
         public Form1()
         {
             InitializeComponent();
-            comboBox_ComPorts.Items.AddRange(SerialPort.GetPortNames());
-
+            notifyIcon = notifyIcon1;
+            comboBox_ComPorts.DataSource = SerialPort.GetPortNames();
+            notifyIcon.DoubleClick += TrayIcon_DoubleClick;
+            Thread t = new Thread(getAudioProcs);
+            t.Start();
+            t.Join();
+            comboBox_App1.DataSource = getProcNames(audioProcesses);
+            comboBox_App2.DataSource = getProcNames(audioProcesses);
+            comboBox_App1.SelectedItem = 0;
+            comboBox_App2.SelectedItem = 1;
+            selectedProcs[0] = getAppProc(comboBox_App1.SelectedItem.ToString());
+            selectedProcs[1] = getAppProc(comboBox_App2.SelectedItem.ToString());
         }
 
- 
+
 
         private void comPortBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            port = new SerialPort(comboBox_ComPorts.SelectedItem.ToString(), 9600, Parity.None, 8, StopBits.One);
-            port.Handshake = Handshake.None;
-            port.DtrEnable = true;
-            port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-            port.Open();
+            if (port == null || !port.IsOpen)
+            {
+                port = new SerialPort(comboBox_ComPorts.SelectedItem.ToString(), 9600, Parity.None, 8, StopBits.One);
+                port.Handshake = Handshake.None;
+                port.DtrEnable = true;
+                port.Open();
+            }
         }
+
+        
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
@@ -100,22 +115,31 @@ namespace AudioSerialClientGUI
         }
         public void getAudioProcs()
         {
+            List<Process> ap = new List<Process>();
             allSessions = Audio.getSessions();
             Process[] allProcesses = Process.GetProcesses();
 
             foreach (Process theprocess in allProcesses)
             {
-                foreach(CSCore.CoreAudioAPI.AudioSessionControl2 ac in allSessions)
+                foreach(CSCore.CoreAudioAPI.AudioSessionControl2 audSesh in allSessions)
                 {
-                    if (theprocess.Id == ac.ProcessID)
+                    if (theprocess.Id == audSesh.ProcessID)
                     {
                         audioProcesses.Add(theprocess);
                     }
                 }
             }
-
         }
                
+        private List<string> getProcNames(List<Process> audioProcesses)
+        {
+            List<string> procNames = new List<string>();
+            foreach (Process theprocess in audioProcesses)
+            {
+                procNames.Add(theprocess.ProcessName);                
+            }
+            return procNames;
+        }
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -124,21 +148,6 @@ namespace AudioSerialClientGUI
                 port.Close();
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Thread t = new Thread(getAudioProcs);
-            t.Start();
-            t.Join();
-
-            audioProcesses.ForEach((Process proc) => {
-                comboBox_App1.Items.Add(proc.ProcessName);
-                comboBox_App2.Items.Add(proc.ProcessName);
-            });
-
-        }
-
-
 
         private Process getAppProc(string appName )
         {
@@ -155,18 +164,39 @@ namespace AudioSerialClientGUI
 
         private void comboBox_AudioApps_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-                selectedProcs[0] = getAppProc(comboBox_App1.SelectedItem.ToString());
-
+            selectedProcs[0] = getAppProc(comboBox_App1.SelectedItem.ToString());
             textbox_App1.Text = Audio.getVolume(selectedProcs[0].Id, allSessions).ToString();
         }
 
         private void comboBox_App2_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-                selectedProcs[1] = getAppProc(comboBox_App2.SelectedItem.ToString());
-
+            selectedProcs[1] = getAppProc(comboBox_App2.SelectedItem.ToString());
             textbox_App2.Text = Audio.getVolume(selectedProcs[1].Id, allSessions).ToString();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            //if the form is minimized  
+            //hide it from the task bar  
+            //and show the system tray icon (represented by the NotifyIcon control)  
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+                ShowInTaskbar = true;
+            }
+        }
+
+
+        private void TrayIcon_DoubleClick(object sender, EventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+            ShowInTaskbar = true;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
     }
 
