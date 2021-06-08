@@ -16,7 +16,6 @@ namespace AudioSerialClientGUI
 
         private List<Process> audioProcesses = new List<Process>();
         private Process[] selectedProcs = { null, null };
-
         private static SerialPort port;
         private CSCore.CoreAudioAPI.AudioSessionControl2[] allSessions;
         private string[] latestVals = { "0 : 0.00\r", "1 : 0.00\r" };
@@ -36,8 +35,14 @@ namespace AudioSerialClientGUI
             comboBox_App2.DataSource = getProcNames(audioProcesses);
             comboBox_App1.SelectedItem = 0;
             comboBox_App2.SelectedItem = 1;
-            selectedProcs[0] = getAppProc(comboBox_App1.SelectedItem.ToString());
-            selectedProcs[1] = getAppProc(comboBox_App2.SelectedItem.ToString());
+            if (comboBox_App1.SelectedIndex != -1)
+            {
+                selectedProcs[0] = getAppProc(comboBox_App1.SelectedItem.ToString());
+            }
+            if (comboBox_App2.SelectedIndex != -1)
+            {
+                selectedProcs[1] = getAppProc(comboBox_App2.SelectedItem.ToString());
+            }
         }
 
 
@@ -49,6 +54,8 @@ namespace AudioSerialClientGUI
                 port = new SerialPort(comboBox_ComPorts.SelectedItem.ToString(), 9600, Parity.None, 8, StopBits.One);
                 port.Handshake = Handshake.None;
                 port.DtrEnable = true;
+                port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
                 port.Open();
             }
         }
@@ -78,9 +85,7 @@ namespace AudioSerialClientGUI
                     int index = int.Parse(indata.Substring(0, 1));
                     if (selectedProcs[index] != null)
                     {
-
-                                adjustVol(index, indata);
-
+                        adjustVol(index, indata);
                     }
                 }
                 
@@ -196,7 +201,6 @@ namespace AudioSerialClientGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
     }
 
