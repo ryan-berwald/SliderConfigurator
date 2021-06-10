@@ -46,20 +46,18 @@ namespace AudioSerialClientGUI
             this.comboBox_ComPorts.AllowDrop = true;
             this.comboBox_ComPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_ComPorts.FormattingEnabled = true;
-            this.comboBox_ComPorts.Location = new System.Drawing.Point(72, 83);
-            this.comboBox_ComPorts.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox_ComPorts.Location = new System.Drawing.Point(50, 50);
             this.comboBox_ComPorts.Name = "comboBox_ComPorts";
-            this.comboBox_ComPorts.Size = new System.Drawing.Size(171, 33);
+            this.comboBox_ComPorts.Size = new System.Drawing.Size(121, 23);
             this.comboBox_ComPorts.TabIndex = 1;
             this.comboBox_ComPorts.SelectedIndexChanged += new System.EventHandler(this.comPortBox_SelectedIndexChanged);
             // 
             // textbox_Val1
             // 
-            this.textbox_Val1.Location = new System.Drawing.Point(72, 154);
-            this.textbox_Val1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textbox_Val1.Location = new System.Drawing.Point(50, 92);
             this.textbox_Val1.Name = "textbox_Val1";
             this.textbox_Val1.ReadOnly = true;
-            this.textbox_Val1.Size = new System.Drawing.Size(171, 31);
+            this.textbox_Val1.Size = new System.Drawing.Size(121, 23);
             this.textbox_Val1.TabIndex = 2;
             // 
             // comboBox_App1
@@ -67,20 +65,19 @@ namespace AudioSerialClientGUI
             this.comboBox_App1.AllowDrop = true;
             this.comboBox_App1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_App1.FormattingEnabled = true;
-            this.comboBox_App1.Location = new System.Drawing.Point(359, 83);
-            this.comboBox_App1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox_App1.Location = new System.Drawing.Point(251, 50);
             this.comboBox_App1.Name = "comboBox_App1";
-            this.comboBox_App1.Size = new System.Drawing.Size(171, 33);
+            this.comboBox_App1.Size = new System.Drawing.Size(121, 23);
             this.comboBox_App1.TabIndex = 3;
+            this.comboBox_App1.DropDown += new System.EventHandler(this.comboBox_App1_DropDown);
             this.comboBox_App1.SelectedIndexChanged += new System.EventHandler(this.comboBox_AudioApps_SelectedIndexChanged);
             // 
             // textbox_App1
             // 
-            this.textbox_App1.Location = new System.Drawing.Point(584, 83);
-            this.textbox_App1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textbox_App1.Location = new System.Drawing.Point(409, 50);
             this.textbox_App1.Name = "textbox_App1";
             this.textbox_App1.ReadOnly = true;
-            this.textbox_App1.Size = new System.Drawing.Size(171, 31);
+            this.textbox_App1.Size = new System.Drawing.Size(121, 23);
             this.textbox_App1.TabIndex = 4;
             // 
             // comboBox_App2
@@ -88,29 +85,27 @@ namespace AudioSerialClientGUI
             this.comboBox_App2.AllowDrop = true;
             this.comboBox_App2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_App2.FormattingEnabled = true;
-            this.comboBox_App2.Location = new System.Drawing.Point(359, 154);
-            this.comboBox_App2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox_App2.Location = new System.Drawing.Point(251, 92);
             this.comboBox_App2.Name = "comboBox_App2";
-            this.comboBox_App2.Size = new System.Drawing.Size(171, 33);
+            this.comboBox_App2.Size = new System.Drawing.Size(121, 23);
             this.comboBox_App2.TabIndex = 5;
+            this.comboBox_App2.DropDown += new System.EventHandler(this.comboBox_App2_DropDown);
             this.comboBox_App2.SelectedIndexChanged += new System.EventHandler(this.comboBox_App2_SelectedIndexChanged);
             // 
             // textbox_App2
             // 
-            this.textbox_App2.Location = new System.Drawing.Point(584, 154);
-            this.textbox_App2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textbox_App2.Location = new System.Drawing.Point(409, 92);
             this.textbox_App2.Name = "textbox_App2";
             this.textbox_App2.ReadOnly = true;
-            this.textbox_App2.Size = new System.Drawing.Size(171, 31);
+            this.textbox_App2.Size = new System.Drawing.Size(121, 23);
             this.textbox_App2.TabIndex = 6;
             // 
             // textbox_Val2
             // 
-            this.textbox_Val2.Location = new System.Drawing.Point(72, 195);
-            this.textbox_Val2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textbox_Val2.Location = new System.Drawing.Point(50, 117);
             this.textbox_Val2.Name = "textbox_Val2";
             this.textbox_Val2.ReadOnly = true;
-            this.textbox_Val2.Size = new System.Drawing.Size(171, 31);
+            this.textbox_Val2.Size = new System.Drawing.Size(121, 23);
             this.textbox_Val2.TabIndex = 7;
             // 
             // notifyIcon1
@@ -124,10 +119,10 @@ namespace AudioSerialClientGUI
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(824, 299);
+            this.ClientSize = new System.Drawing.Size(581, 190);
             this.Controls.Add(this.textbox_Val2);
             this.Controls.Add(this.textbox_App2);
             this.Controls.Add(this.comboBox_App2);
@@ -137,14 +132,12 @@ namespace AudioSerialClientGUI
             this.Controls.Add(this.comboBox_ComPorts);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(846, 355);
-            this.MinimumSize = new System.Drawing.Size(846, 355);
+            this.MaximumSize = new System.Drawing.Size(597, 229);
+            this.MinimumSize = new System.Drawing.Size(597, 229);
             this.Name = "Form1";
             this.ShowInTaskbar = false;
             this.Text = "PotPi";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

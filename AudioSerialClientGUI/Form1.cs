@@ -49,15 +49,18 @@ namespace AudioSerialClientGUI
 
         private void comPortBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (port == null || !port.IsOpen)
+            if (port != null && port.IsOpen)
             {
+                port.Close();
+            }
+
                 port = new SerialPort(comboBox_ComPorts.SelectedItem.ToString(), 9600, Parity.None, 8, StopBits.One);
                 port.Handshake = Handshake.None;
                 port.DtrEnable = true;
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
                 port.Open();
-            }
+            
         }
 
         
@@ -69,7 +72,9 @@ namespace AudioSerialClientGUI
 
             for (int x = 0; x < latestVals.Length; x++)
             {
+
                 string lastLine = sp.ReadLine();
+                
                 latestVals[int.Parse(lastLine.Substring(0, 1))] = lastLine;
                 control.Invoke((MethodInvoker)delegate ()
                 {
@@ -120,7 +125,8 @@ namespace AudioSerialClientGUI
         }
         public void getAudioProcs()
         {
-            List<Process> ap = new List<Process>();
+            audioProcesses.Clear();
+            audioProcesses.TrimExcess();
             allSessions = Audio.getSessions();
             Process[] allProcesses = Process.GetProcesses();
 
@@ -198,9 +204,20 @@ namespace AudioSerialClientGUI
             this.WindowState = FormWindowState.Normal;
             ShowInTaskbar = true;
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void comboBox_App1_DropDown(object sender, EventArgs e)
         {
+            Thread t = new Thread(getAudioProcs);
+            t.Start();
+            t.Join();
+            comboBox_App1.DataSource = getProcNames(audioProcesses);
+        }
+
+        private void comboBox_App2_DropDown(object sender, EventArgs e)
+        {
+            Thread t = new Thread(getAudioProcs);
+            t.Start();
+            t.Join();
+            comboBox_App2.DataSource = getProcNames(audioProcesses);
         }
     }
 
